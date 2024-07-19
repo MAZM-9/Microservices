@@ -1,0 +1,10 @@
+/home/ubuntu/Desktop/Microservices/MS-Stock/src/main/java/com/example/msstock/MsStockApplication.java
+/home/ubuntu/Desktop/Microservices/MS-Stock/src/main/java/com/example/msstock/client/ProductCleint.java
+/home/ubuntu/Desktop/Microservices/MS-Stock/src/main/java/com/example/msstock/controller/StockController.java
+/home/ubuntu/Desktop/Microservices/MS-Stock/src/main/java/com/example/msstock/dto/ProductResponse.java
+/home/ubuntu/Desktop/Microservices/MS-Stock/src/main/java/com/example/msstock/dto/StockRequest.java
+/home/ubuntu/Desktop/Microservices/MS-Stock/src/main/java/com/example/msstock/dto/StockResponse.java
+/home/ubuntu/Desktop/Microservices/MS-Stock/src/main/java/com/example/msstock/entities/Stock.java
+/home/ubuntu/Desktop/Microservices/MS-Stock/src/main/java/com/example/msstock/entities/StockProduct.java
+/home/ubuntu/Desktop/Microservices/MS-Stock/src/main/java/com/example/msstock/repository/StockRepository.java
+/home/ubuntu/Desktop/Microservices/MS-Stock/src/main/java/com/example/msstock/service/StockService.java

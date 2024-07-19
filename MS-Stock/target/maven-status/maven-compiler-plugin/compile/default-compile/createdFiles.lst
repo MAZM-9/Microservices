@@ -1,0 +1,12 @@
+com/example/msstock/dto/ProductResponse.class
+com/example/msstock/dto/StockResponse.class
+com/example/msstock/controller/StockController.class
+com/example/msstock/entities/StockProduct.class
+com/example/msstock/MsStockApplication.class
+com/example/msstock/service/StockService.class
+com/example/msstock/dto/StockRequest.class
+com/example/msstock/entities/Stock$StockBuilder.class
+com/example/msstock/repository/StockRepository.class
+com/example/msstock/entities/StockProduct$StockProductBuilder.class
+com/example/msstock/entities/Stock.class
+com/example/msstock/client/ProductCleint.class

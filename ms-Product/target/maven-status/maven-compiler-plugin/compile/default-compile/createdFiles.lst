@@ -1,0 +1,7 @@
+com/example/msproduct/service/ProductService.class
+com/example/msproduct/entities/Product.class
+com/example/msproduct/dto/ProductRequest.class
+com/example/msproduct/repository/ProductRepository.class
+com/example/msproduct/dto/ProductResponse.class
+com/example/msproduct/controller/ProductController.class
+com/example/msproduct/MsProductApplication.class

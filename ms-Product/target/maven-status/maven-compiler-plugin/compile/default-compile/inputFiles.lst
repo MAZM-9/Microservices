@@ -1,0 +1,7 @@
+/home/ubuntu/Desktop/Microservices/ms-Product/src/main/java/com/example/msproduct/MsProductApplication.java
+/home/ubuntu/Desktop/Microservices/ms-Product/src/main/java/com/example/msproduct/controller/ProductController.java
+/home/ubuntu/Desktop/Microservices/ms-Product/src/main/java/com/example/msproduct/dto/ProductRequest.java
+/home/ubuntu/Desktop/Microservices/ms-Product/src/main/java/com/example/msproduct/dto/ProductResponse.java
+/home/ubuntu/Desktop/Microservices/ms-Product/src/main/java/com/example/msproduct/entities/Product.java
+/home/ubuntu/Desktop/Microservices/ms-Product/src/main/java/com/example/msproduct/repository/ProductRepository.java
+/home/ubuntu/Desktop/Microservices/ms-Product/src/main/java/com/example/msproduct/service/ProductService.java

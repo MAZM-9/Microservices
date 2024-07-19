@@ -1,0 +1,127 @@
+version: "3.8"
+services:
+  mysql:
+    image: mysql:latest
+    container_name: ms-product-db
+    environment:
+      MYSQL_DATABASE: 'product-service'
+      #MYSQL_USER: 'user'
+      #MYSQL_PASSWORD: '12345678'
+      MYSQL_ROOT_PASSWORD: '12345678'
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./product-db/data/conf.d:/etc/mysql/conf.d
+      - ./product-db/data/logs:/logs
+      - ./product-db/usr/local/var/mysql:/var/lib/mysql
+  ms-product:
+    image: ms-product
+    container_name: ms-product
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://ms-product-db:3306/product-service?createDatabaseIfNotExist=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=12345678
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:password@discovery-server:8761/eureka
+      #- SPRING_CONFIG_IMPORT='configserver:http://localhost:8080/'
+      - SPRING_ZIPKIN_ENDPOINT=http://zipkin:9411/api/v2/spans
+    ports:
+      - "8081:8081"
+############################# MS-Stock #######################################  
+  mongodb:
+      container_name: mongo-stock-db
+      image: mongo:latest
+      restart: always
+      ports:
+        - "27017:27017"
+      environment:
+        MONGO_INITDB_ROOT_USERNAME: root
+        MONGO_INITDB_ROOT_PASSWORD: password
+        MONGO_INIT_DATABASE: stock-service
+      volumes:
+        - ./stock-db/mongo-data:/data/d 
+  ms-stock:
+      container_name: ms-stock
+      image: ms-stock
+      restart: always
+      ports:
+        - "8082:8082"
+      environment:
+        - SPRING_DATASOURCE_URL=mongodb://root:password@mongo-stock-db:27017/stock-service?authSource=admin
+        - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:password@discovery-server:8761/eureka
+        #- SPRING_CONFIG_IMPORT='optional:configserver:http://localhost:8080/'
+        - SPRING_ZIPKIN_ENDPOINT=http://zipkin:9411/api/v2/spans
+################################# gate ###############################################################
+  gateway:
+    container_name: gateway
+    image: gateway
+    restart: always
+    ports:
+      - "8282:8282"
+    environment:
+      - SPRING_EUREKA_SERVER=discovery-server
+      - KEYCLOACK_JWT_REALM=http://keycloack:8080/realms/spring-microservice-security-realm
+      - SPRING_ZIPKIN_ENDPOINT=http://zipkin:9411/api/v2/spans
+      - SPRING_CONFIG_SERVER=optional:configserver:http://localhost:8080/
+  discovery:
+    container_name: discovery-server
+    image: discovery-service
+    restart: always
+    ports:
+      - "8761:8761"
+    environment:
+      - SPRING_ZIPKIN_ENDPOINT=http://zipkin:9411/api/v2/spans     
+############################### what s tht ##########################
+
+  broker:
+    image: confluentinc/cp-kafka:7.0.1
+    container_name: broker
+    ports:
+      - "9092:9092"
+    #depends_on:
+      #- zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://broker:29092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+
+  ## Zipkin
+  zipkin:
+    image: openzipkin/zipkin:latest
+    container_name: zipkin
+    ports:
+      - "9411:9411"
+
+##################################
+
+  keycloak-mysql:
+    container_name: keycloak-mysql
+    image: mysql:8
+    volumes:
+      - ./volume-data/mysql_keycloak_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: keycloak
+      MYSQL_USER: keycloak
+      MYSQL_PASSWORD: password
+  keycloak:
+    container_name: keycloak
+    image: quay.io/keycloak/keycloak:24.0.1
+    command: [ "start-dev", "--import-realm" ]
+    environment:
+      DB_VENDOR: MYSQL
+      DB_ADDR: mysql
+      DB_DATABASE: keycloak
+      DB_USER: keycloak
+      DB_PASSWORD: password
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - "8181:8080"
+    volumes:
+      - ./docker/keycloak/realms/:/opt/keycloak/data/import/
+    depends_on:
+      - keycloak-mysql
